@@ -24,7 +24,7 @@ public class VpdDiskData
         writer.Write((uint)type);
         if (list != null)
         {
-            writer.Write((uint)QuestMapNodeDefs.Count);
+            writer.Write((uint)list.Count);
             foreach (T u in list)
             {
                 var position = writer.BaseStream.Position;
@@ -35,6 +35,7 @@ public class VpdDiskData
 
                 // Now we know how large the serialized message is, write 
                 writer.BaseStream.Seek(position, SeekOrigin.Begin);
+                size = size - sizeof(uint);
                 writer.Write(size);
                 writer.BaseStream.Seek(size, SeekOrigin.Current);
             }
