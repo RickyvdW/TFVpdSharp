@@ -1,6 +1,6 @@
 # TFVpdSharp
 
-Tools for converting (modified) JSON files into TF2's VPD binary format.
+Tools for converting (modified) JSON files into TF2's VPD binary format. Shoutouts to <a class="user-mention" data-hovercard-type="user" data-hovercard-url="https://github.com/users/renimg/hovercard" href="https://github.com/renimg">renimg</a> for the inspiration.
 
 #### Dependencies
 
