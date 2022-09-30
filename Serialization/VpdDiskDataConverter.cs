@@ -1,26 +1,32 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using TFVpdSharp.Protobuf;
+using TFVpdSharp.Models;
 
-namespace TFVpdSharp.Serialization;
-
-// .json converter compatible with format specified by https://gist.github.com/Ne3tCode/b3e6f7f6e399045843239c30a9c36a15.
-public class LegacyVpdDiskDataConverter : JsonConverter<VpdDiskData>
+namespace TFVpdSharp.Serialization
 {
-    #region Constructors
-    public LegacyVpdDiskDataConverter() { }
-
-    public LegacyVpdDiskDataConverter(JsonSerializerOptions options) { }
-    #endregion
-    
-    public override VpdDiskData? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+// .json converter compatible with format specified by https://gist.github.com/Ne3tCode/b3e6f7f6e399045843239c30a9c36a15.
+    public class LegacyVpdDiskDataConverter : JsonConverter<VpdDiskData>
     {
-        if (reader.TokenType != JsonTokenType.StartObject)
-            throw new JsonException();
+        #region Constructors
 
-        VpdDiskData diskData = new VpdDiskData();
-        
-        while (reader.Read())
+        public LegacyVpdDiskDataConverter()
+        {
+        }
+
+        public LegacyVpdDiskDataConverter(JsonSerializerOptions options)
+        {
+        }
+
+        #endregion
+
+        public override VpdDiskData? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+                throw new JsonException();
+
+            VpdDiskData diskData = new VpdDiskData();
+
+            while (reader.Read())
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                     return diskData;
@@ -85,11 +91,12 @@ public class LegacyVpdDiskDataConverter : JsonConverter<VpdDiskData>
                 }
             }
 
-        return null;
-    }
+            return null;
+        }
 
-    public override void Write(Utf8JsonWriter writer, VpdDiskData value, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
+        public override void Write(Utf8JsonWriter writer, VpdDiskData value, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
