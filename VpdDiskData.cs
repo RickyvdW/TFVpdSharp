@@ -1,9 +1,9 @@
 ﻿using ProtoBuf;
+using TFVpdSharp.Protobuf;
 
 namespace TFVpdSharp;
 
-using TFVpdSharp.Protobuf;
-
+// Data class compatible with format specified by https://gist.github.com/Ne3tCode/b3e6f7f6e399045843239c30a9c36a15.
 public class VpdDiskData
 {
     public List<CMsgQuestMapNodeDef>? QuestMapNodeDefs;
