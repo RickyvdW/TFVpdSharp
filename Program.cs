@@ -19,26 +19,40 @@ if (!File.Exists(filePath))
 }
 
 // If your file isn't valid JSON, the JSON parser will throw an exception.
+using FileStream fileStream = File.OpenRead(filePath);
+VpdDiskData? vpdDiskData = null;
+
 try
 {
-    using FileStream fileStream = File.OpenRead(filePath);
-    VpdDiskData? vpdDiskData = JsonSerializer.Deserialize<VpdDiskData>(fileStream, 
+    vpdDiskData = JsonSerializer.Deserialize<VpdDiskData>(fileStream, 
         new JsonSerializerOptions
         {
             MaxDepth = 128,
             Converters = { new JsonStringEnumConverter(), new LegacyVpdDiskDataConverter() }
         }
     );
+}
+catch (Exception e)
+{
+    Console.WriteLine(e);
+    Console.WriteLine("Conversion failed. Press any key to continue.");
+    Console.ReadKey();
     fileStream.Close();
+    return;
+}
 
-    if (vpdDiskData == null)
-    {
-        // Something went wrong during JSON deserialization step.
-        Console.WriteLine($"Reading input .json file failed. {vpdDiskData}");
-        return;
-    }
+fileStream.Close();
 
-    // Write to .vpd file.
+if (vpdDiskData == null)
+{
+    // Something went wrong during JSON deserialization step.
+    Console.WriteLine($"Reading input .json file failed. {vpdDiskData}");
+    return;
+}
+
+// Write to .vpd file.
+try
+{
     string vpdPath = Path.ChangeExtension(filePath, ".generated.vpd");
     using var stream = File.Open(vpdPath, FileMode.Create);
     using var writer = new BinaryWriter(stream, Encoding.UTF8, false);
@@ -47,4 +61,6 @@ try
 catch (Exception e)
 {
     Console.WriteLine(e);
+    Console.WriteLine("Re-serialization failed. Press any key to continue.");
+    Console.ReadKey();
 }
